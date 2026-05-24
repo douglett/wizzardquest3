@@ -1,6 +1,6 @@
 package main
 
-// import "fmt"
+import "fmt"
 import "github.com/gdamore/tcell/v3"
 
 var screen tcell.Screen
@@ -30,24 +30,59 @@ func main() {
 
 	player.hp = player.stm * 5
 	enemy.hp = enemy.stm * 5
-	dialog.lines = []string{
-		"What will you do?",
-		"  (a)ttack",
-		"  (r)run",
-	}
 
 	loop: for {
+		// show
+		dialog.lines = []string{
+			"What will you do?",
+			"  (a)ttack",
+			"  (r)run",
+		}
+		show()
+
+		// input
 		switch s := input(); s {
 			case "", "resize":
 			case "quit", "r":
 				break loop
-			default:
-				dialog.error = "unknown command: " + s
+			case "a":
+				attack()
+			// default:
+			// 	dialog.error = "unknown command: " + s
 		}
-
-		// show
-		show()
 	}
+}
+
+func attack() {
+	playerdmg := maxi(1, player.str - enemy.def)
+	enemy.hp -= playerdmg
+	dialog.lines = []string{
+		fmt.Sprintf("You attack the %s for %d damage!", enemy.name, playerdmg),
+	}
+
+	loop1: for {
+		show()
+		switch input() {
+			case " ":  break loop1
+		}
+	}
+
+	enemydmg := maxi(1, enemy.str - player.def)
+	player.hp -= enemydmg
+	dialog.lines = append(dialog.lines, "")
+	dialog.lines = append(dialog.lines, fmt.Sprintf("%s attacks you for %d damage!", enemy.name, enemydmg))
+
+	loop2: for {
+		show()
+		switch input() {
+			case " ":  break loop2
+		}
+	}
+}
+
+func maxi(a, b int) int {
+	if (a > b) { return a }
+	return b
 }
 
 func show() {
