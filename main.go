@@ -1,15 +1,19 @@
 package main
 
-import "fmt"
+// import "fmt"
 import "github.com/gdamore/tcell/v3"
 
 var screen tcell.Screen
 
 var player = Mob{
 	name: "player",
+	stm: 3,
+	str: 3,
 }
 var enemy = Mob{
 	name: "slime",
+	stm: 1,
+	str: 1,
 }
 
 func main() {
@@ -26,7 +30,6 @@ func main() {
 
 	player.hp = player.stm * 5
 	enemy.hp = enemy.stm * 5
-	frame := 0
 
 	loop: for {
 		// get events
@@ -38,15 +41,27 @@ func main() {
 				switch event.Key() {
 					case tcell.KeyCtrlC, tcell.KeyESC:
 						break loop
+					case tcell.KeyRune:
+						if event.Str() == "r" {
+							break loop
+						}
 				}
 		}
 
 		// show
 		screen.Clear()
-			screen.PutStr(0, 0, fmt.Sprintf("Hello world %d", frame))
-			player.show(10, 10)
-			enemy.show(50, 10)
+			screen.PutStr(0, 0, "Wizzard Battle Engine!")
+			player.show(1, 2)
+			enemy.show(40, 2)
+
+			lines := []string{
+				"What will you do?",
+				"  (a)ttack",
+				"  (r)run",
+			}
+			for i, l := range(lines) {
+				screen.PutStr(0, 12+i, l)
+			}
 		screen.Show()
-		frame++
 	}
 }
