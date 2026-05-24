@@ -18,11 +18,9 @@ func (mob* Mob) show(x, y int) {
 		fmt.Sprintf("def: %d", mob.def),
 	}
 
-	// lines = append(lines, )
-
-	// screen.PutStr(x, y, fmt.Sprintf("Hello world %d", frame))
-	// screen.PutStr(x, y, lines[0])
+	screen.PutStr(x, y, "╔════════╗")
 	for i, line := range(lines) {
-		screen.PutStr(x, y+i, line)
+		screen.PutStr(x, y+i+1, fmt.Sprintf("║%-8s║", line))
 	}
+	screen.PutStr(x, y+len(lines)+1, "╚════════╝")
 }
