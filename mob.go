@@ -19,8 +19,8 @@ func (mob* Mob) show(x, y int) {
 	}
 
 	screen.PutStr(x, y, "╔════════╗")
-	for i, line := range(lines) {
-		screen.PutStr(x, y+i+1, fmt.Sprintf("║%-8s║", line))
+	for i, l := range(lines) {
+		screen.PutStr(x, y+i+1, fmt.Sprintf("║%-8s║", l))
 	}
 	screen.PutStr(x, y+len(lines)+1, "╚════════╝")
 }
