@@ -13,12 +13,6 @@ var player = Mob{
 }
 var enemy = Mob{}
 
-var Slime = Mob{
-	name: "slime",
-	stm: 1,
-	str: 2,
-}
-
 func main() {
 	var err error
 	screen, err = tcell.NewScreen()
@@ -32,7 +26,7 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player.hp = player.stm * STAMMOD
+	player.fullhp()
 	// player.hp = 1
 
 	selectenemy()
@@ -48,7 +42,7 @@ func recoverquit() {
 	}
 }
 
-func selectenemy() {
+func selectenemy() (result int) {
 	for {
 		// show
 		dialog.lines = []string{
@@ -61,17 +55,17 @@ func selectenemy() {
 		// input
 		switch input() {
 			case "1":
-				r := battle(1)
-				if r == -1 { return }
+				enemy = MobSlime
+				result = battle()
 		}
+
+		if result == 2 { return }
 	}
 }
 
-func battle(enemynum int) (result int) {
-	switch enemynum {
-		case 1:  enemy = Slime
-	}
-	enemy.hp = enemy.stm * STAMMOD
+func battle() (result int) {
+	// begin at full enemy hp
+	enemy.fullhp()
 
 	loop: for {
 		// show
@@ -87,12 +81,12 @@ func battle(enemynum int) (result int) {
 			case "r":
 				break loop
 			case "a":
-				if attack() != 0 { break loop }
+				result = attack()
+				if result != 0 { break loop }
 		}
 	}
 
 	// cleanup
-	if enemy.hp <= 0 { result = 1 }
 	enemy = Mob{}
 	return
 }

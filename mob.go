@@ -25,3 +25,15 @@ func (mob* Mob) show(x, y int) {
 	}
 	screen.PutStr(x, y+len(lines)+1, "╚════════╝")
 }
+
+func (mob* Mob) fullhp() {
+	mob.hp = mob.stm * STAMMOD
+}
+
+
+// Mob types
+var MobSlime = Mob{
+	name: "slime",
+	stm: 1,
+	str: 2,
+}
