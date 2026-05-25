@@ -22,6 +22,7 @@ var Slime = Mob{
 func main() {
 	var err error
 	screen, err = tcell.NewScreen()
+	defer recoverquit()
 	defer screen.Fini()
 	if err != nil {
 		panic(err)
@@ -37,6 +38,16 @@ func main() {
 	selectenemy()
 }
 
+func recoverquit() {
+	if r := recover(); r != nil {
+		if r == "quit" {
+			fmt.Println("game quit")
+		} else {
+			panic(r)
+		}
+	}
+}
+
 func selectenemy() {
 	for {
 		// show
@@ -49,8 +60,6 @@ func selectenemy() {
 
 		// input
 		switch input() {
-			case "quit":
-				return
 			case "1":
 				r := battle(1)
 				if r == -1 { return }
@@ -75,16 +84,10 @@ func battle(enemynum int) (result int) {
 
 		// input
 		switch input() {
-			case "quit":
-				return -1
 			case "r":
 				break loop
 			case "a":
-				r := attack()
-				switch r {
-					case -1:    return -1
-					case 1, 2:  break loop
-				}
+				if attack() != 0 { break loop }
 		}
 	}
 
@@ -101,15 +104,13 @@ func attack() int {
 	dialog.lines = []string{
 		fmt.Sprintf("You attack the %s for %d damage!", enemy.name, playerdmg),
 	}
-	r := waitspace()
-	if r == -1 { return -1 }
+	waitspace()
 	
 	// check for loss
 	if enemy.hp <= 0 {
 		dialog.lines = append(dialog.lines, "")
 		dialog.lines = append(dialog.lines, fmt.Sprintf("The %s has been defeated.", enemy.name))
-		r = waitspace()
-		if r == -1 { return -1 }
+		waitspace()
 		return 1
 	}
 
@@ -118,15 +119,13 @@ func attack() int {
 	player.hp -= enemydmg
 	dialog.lines = append(dialog.lines, "")
 	dialog.lines = append(dialog.lines, fmt.Sprintf("%s attacks you for %d damage!", enemy.name, enemydmg))
-	r = waitspace()
-	if r == -1 { return -1 }
+	waitspace()
 
 	// check for loss
 	if player.hp <= 0 {
 		dialog.lines = append(dialog.lines, "")
 		dialog.lines = append(dialog.lines, "You have been defeated.")
-		r = waitspace()
-		if r == -1 { return -1 }
+		waitspace()
 		return 2
 	}
 
@@ -137,10 +136,7 @@ func attack() int {
 func waitspace() int {
 	for {
 		show()
-		switch input() {
-			case "quit":  return -1
-			case " ":     return 0
-		}
+		if input() == " " { return 0 }
 	}
 }
 
@@ -168,7 +164,8 @@ func input() string {
 		case *tcell.EventKey:
 			switch event.Key() {
 				case tcell.KeyCtrlC, tcell.KeyESC:
-					return "quit"
+					// return "quit"
+					panic("quit")
 				case tcell.KeyRune:
 					return event.Str()
 			}
