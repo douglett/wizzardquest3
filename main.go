@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "github.com/gdamore/tcell/v3"
 
+const STAMMOD = 5
 var screen tcell.Screen
 var dialog = Dialog{}
 var player = Mob{
@@ -15,7 +16,7 @@ var enemy = Mob{}
 var Slime = Mob{
 	name: "slime",
 	stm: 1,
-	str: 1,
+	str: 2,
 }
 
 func main() {
@@ -30,7 +31,8 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player.hp = player.stm * 5
+	player.hp = player.stm * STAMMOD
+	// player.hp = 1
 
 	selectenemy()
 }
@@ -46,8 +48,7 @@ func selectenemy() {
 		show()
 
 		// input
-		switch s := input(); s {
-			case "", "resize":
+		switch input() {
 			case "quit":
 				return
 			case "1":
@@ -61,7 +62,7 @@ func battle(enemynum int) (result int) {
 	switch enemynum {
 		case 1:  enemy = Slime
 	}
-	enemy.hp = enemy.stm * 5
+	enemy.hp = enemy.stm * STAMMOD
 
 	loop: for {
 		// show
@@ -100,38 +101,47 @@ func attack() int {
 	dialog.lines = []string{
 		fmt.Sprintf("You attack the %s for %d damage!", enemy.name, playerdmg),
 	}
+	r := waitspace()
+	if r == -1 { return -1 }
+	
+	// check for loss
 	if enemy.hp <= 0 {
 		dialog.lines = append(dialog.lines, "")
 		dialog.lines = append(dialog.lines, fmt.Sprintf("The %s has been defeated.", enemy.name))
+		r = waitspace()
+		if r == -1 { return -1 }
+		return 1
 	}
-	// wait for space
-	loop1: for {
-		show()
-		switch input() {
-			case "quit":  return -1
-			case " ":     break loop1
-		}
-	}
-	if enemy.hp <= 0 { return 1 }
 
 	// enemy attack
 	enemydmg := maxi(1, enemy.str - player.def)
 	player.hp -= enemydmg
 	dialog.lines = append(dialog.lines, "")
 	dialog.lines = append(dialog.lines, fmt.Sprintf("%s attacks you for %d damage!", enemy.name, enemydmg))
+	r = waitspace()
+	if r == -1 { return -1 }
+
+	// check for loss
 	if player.hp <= 0 {
 		dialog.lines = append(dialog.lines, "")
 		dialog.lines = append(dialog.lines, "You have been defeated.")
+		r = waitspace()
+		if r == -1 { return -1 }
+		return 2
 	}
-	// wait for space
-	loop2: for {
+
+	// no loss
+	return 0
+}
+
+func waitspace() int {
+	for {
 		show()
 		switch input() {
-			case " ":  break loop2
+			case "quit":  return -1
+			case " ":     return 0
 		}
 	}
-	if player.hp <= 0 { return 2 }
-	return 0
 }
 
 func maxi(a, b int) int {
