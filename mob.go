@@ -6,6 +6,7 @@ type Mob struct {
 	name  string
 	hp    int
 	stm, str, int, def int
+	xp    int
 }
 
 func (mob* Mob) show(x, y int) {
