@@ -3,7 +3,6 @@ package main
 import "fmt"
 import "github.com/gdamore/tcell/v3"
 
-const STAMMOD = 5
 var screen tcell.Screen
 var dialog = Dialog{}
 var player = Mob{}
@@ -28,6 +27,8 @@ func main() {
 
 	selectenemy()
 }
+
+// === game ===
 
 func recoverquit() {
 	if r := recover(); r != nil {
@@ -133,17 +134,25 @@ func attack() int {
 	return 0
 }
 
-func waitspace() int {
-	for {
-		show()
-		if input() == " " { return 0 }
-	}
+func levelup() {
+	if player.lvl >= len(LevelStats) - 1 { return }
+	next := LevelStats[player.lvl + 1]
+	if player.xp < next.xp { return }
+
+	// level up
+	dialog.append("")
+	dialog.append(fmt.Sprintf("You have reached level %d!", next.lvl))
+	dialog.append(fmt.Sprintf("You gain: stm+%d, str+%d", next.stm - player.stm, next.str - player.str))
+	
+	player.lvl = next.lvl
+	player.stm = next.stm
+	player.str = next.str
+	player.xp  = player.xp - next.xp
+
+	waitspace()
 }
 
-func maxi(a, b int) int {
-	if (a > b) { return a }
-	return b
-}
+// === screen and input ===
 
 func show() {
 	screen.Clear()
@@ -152,6 +161,13 @@ func show() {
 		if enemy.name != "" { enemy.show(40, 2) }
 		dialog.show(0, 14)
 	screen.Show()
+}
+
+func waitspace() int {
+	for {
+		show()
+		if input() == " " { return 0 }
+	}
 }
 
 func input() string {
@@ -172,4 +188,11 @@ func input() string {
 	}
 	// unhandled
 	return ""
+}
+
+// === helpers ===
+
+func maxi(a, b int) int {
+	if (a > b) { return a }
+	return b
 }

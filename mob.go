@@ -32,13 +32,3 @@ func (mob* Mob) show(x, y int) {
 func (mob* Mob) fullhp() {
 	mob.hp = mob.stm * STAMMOD
 }
-
-
-// Mob types
-var MobSlime = Mob{
-	name: "slime",
-	lvl: 1,
-	stm: 1,
-	str: 2,
-	xp:  5,
-}
