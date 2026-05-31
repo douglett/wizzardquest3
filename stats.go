@@ -35,6 +35,28 @@ var LevelStats = []Mob{
 		str: 9,
 		def: 3,
 	},
+	Mob{
+		lvl: 5,
+		xp:  250,
+		stm: 11,
+		str: 10,
+		def: 4,
+	},
+	// eyeballed
+	Mob{
+		lvl: 6,
+		xp:  350,
+		stm: 12,
+		str: 11,
+		def: 5,
+	},
+	Mob{
+		lvl: 7,
+		xp:  450,
+		stm: 12,
+		str: 12,
+		def: 6,
+	},
 }
 
 // Mob types
@@ -63,10 +85,26 @@ var MobBison = Mob{
 	def: 2,
 }
 var MobBandit = Mob{
-	name: "bison",
+	name: "bandit",
 	lvl: 4,
-	xp:  20,
+	xp:  25,
 	stm: 6,
 	str: 10,
 	def: 2,
+}
+var MobDarkKnight = Mob{
+	name: "d-knight",
+	lvl: 5,
+	xp:  40,
+	stm: 6,
+	str: 10,
+	def: 5,
+}
+var MobDarkLord = Mob{
+	name: "d-lord",
+	lvl: 6,
+	xp:  100,
+	stm: 9,
+	str: 14,
+	def: 4,
 }

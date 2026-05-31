@@ -21,7 +21,7 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player = LevelStats[4]
+	player = LevelStats[6]
 	player.fullhp()
 
 	// temp
@@ -57,6 +57,9 @@ func selectenemy() (result int) {
 			"  (2)   Bat",
 			"  (3)   Bison",
 			"  (4)   Bandit",
+			"  (5)   DarkKnight",
+			"  (6)   DarkLord",
+			"  ... ",
 			"  (r)   Rest",
 			"  (esc) Quit",
 		}
@@ -76,6 +79,13 @@ func selectenemy() (result int) {
 			case "4":
 				enemy = MobBandit
 				result = battle()
+			case "5":
+				enemy = MobDarkKnight
+				result = battle()
+			case "6":
+				enemy = MobDarkLord
+				result = battle()
+				if result == 1 { result = 3 }
 			case "r":
 				dialog.append("")
 				if rest > 0 {
@@ -90,6 +100,7 @@ func selectenemy() (result int) {
 
 		if result == 1 { rest = maxi(0, rest-1) }
 		if result == 2 { return }
+		if result == 3 { youwin(); return }
 		result = 0
 	}
 }
@@ -175,12 +186,25 @@ func levelup() {
 	// level up
 	dialog.append("")
 	dialog.append(fmt.Sprintf("You have reached level %d!", next.lvl))
-	dialog.append(fmt.Sprintf("You gain: stm+%d, str+%d", next.stm - player.stm, next.str - player.str))
+	dialog.append(fmt.Sprintf("You gain: stm+%d, str+%d, def+%d", 
+		next.stm - player.stm, 
+		next.str - player.str,
+		next.def - player.def))
 	
 	player.lvl = next.lvl
 	player.stm = next.stm
 	player.str = next.str
 	player.xp  = player.xp - next.xp
+
+	waitspace()
+}
+
+func youwin() {
+	dialog.lines = []string{
+		"You have defeated the Dark Lord!",
+		"",
+		"Peace reigns accross the land. Well done hero!",
+	}
 
 	waitspace()
 }
