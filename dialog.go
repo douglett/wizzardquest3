@@ -11,7 +11,15 @@ func (di *Dialog) show(x, y int) {
 	for i, l := range(di.lines) {
 		screen.PutStr(x, y+i, l)
 	}
-	if di.error != "" {
-		screen.PutStr(x, y+len(di.lines)+1, di.error)
-	}
+	// error message
+	screen.PutStr(x, y+len(di.lines)+1, di.error)
+}
+
+func (di *Dialog) clear() {
+	di.lines = []string{}
+	di.error = ""
+}
+
+func (di *Dialog) append(str string) {
+	di.lines = append(di.lines, str)
 }

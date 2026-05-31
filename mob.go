@@ -5,6 +5,7 @@ import "fmt"
 type Mob struct {
 	name  string
 	hp    int
+	lvl   int
 	stm, str, int, def int
 	xp    int
 }
@@ -13,10 +14,12 @@ func (mob* Mob) show(x, y int) {
 	lines := []string{
 		mob.name,
 		fmt.Sprintf("%d/%d", mob.hp, mob.stm*5),
+		fmt.Sprintf("lvl: %d", mob.lvl),
 		fmt.Sprintf("stm: %d", mob.stm),
 		fmt.Sprintf("str: %d", mob.str),
 		fmt.Sprintf("int: %d", mob.int),
 		fmt.Sprintf("def: %d", mob.def),
+		fmt.Sprintf("xp:  %d", mob.xp),
 	}
 
 	screen.PutStr(x, y, "╔════════╗")
@@ -34,6 +37,8 @@ func (mob* Mob) fullhp() {
 // Mob types
 var MobSlime = Mob{
 	name: "slime",
+	lvl: 1,
 	stm: 1,
 	str: 2,
+	xp:  5,
 }

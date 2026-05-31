@@ -6,11 +6,7 @@ import "github.com/gdamore/tcell/v3"
 const STAMMOD = 5
 var screen tcell.Screen
 var dialog = Dialog{}
-var player = Mob{
-	name: "player",
-	stm: 3,
-	str: 3,
-}
+var player = Mob{}
 var enemy = Mob{}
 
 func main() {
@@ -26,6 +22,7 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
+	player = LevelStats[1]
 	player.fullhp()
 	// player.hp = 1
 
@@ -86,6 +83,15 @@ func battle() (result int) {
 		}
 	}
 
+	// level up?
+	if result == 1 {
+		player.xp += enemy.xp
+		dialog.append("")
+		dialog.append(fmt.Sprintf("You gained %d XP.", enemy.xp))
+		waitspace()
+		levelup()
+	}
+
 	// cleanup
 	enemy = Mob{}
 	return
@@ -144,7 +150,7 @@ func show() {
 		screen.PutStr(0, 0, "Wizzard Battle Engine!")
 		player.show(1, 2)
 		if enemy.name != "" { enemy.show(40, 2) }
-		dialog.show(0, 12)
+		dialog.show(0, 14)
 	screen.Show()
 }
 
