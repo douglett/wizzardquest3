@@ -21,9 +21,13 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player = LevelStats[3]
+	player = LevelStats[4]
 	player.fullhp()
+
+	// temp
 	// player.hp = 1
+	player.name = "player"
+	player.xp = 0
 
 	selectenemy()
 }
@@ -52,6 +56,7 @@ func selectenemy() (result int) {
 			"  (1)   Slime",
 			"  (2)   Bat",
 			"  (3)   Bison",
+			"  (4)   Bandit",
 			"  (r)   Rest",
 			"  (esc) Quit",
 		}
@@ -67,6 +72,9 @@ func selectenemy() (result int) {
 				result = battle()
 			case "3":
 				enemy = MobBison
+				result = battle()
+			case "4":
+				enemy = MobBandit
 				result = battle()
 			case "r":
 				dialog.append("")
