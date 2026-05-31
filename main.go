@@ -21,7 +21,7 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player = LevelStats[1]
+	player = LevelStats[3]
 	player.fullhp()
 	// player.hp = 1
 
@@ -41,11 +41,18 @@ func recoverquit() {
 }
 
 func selectenemy() (result int) {
+	const REST_TURNS = 3
+	rest := REST_TURNS
+
 	for {
 		// show
 		dialog.lines = []string{
+			fmt.Sprintf("Rest available in %d turns.", rest),
 			"Select enemy:",
 			"  (1)   Slime",
+			"  (2)   Bat",
+			"  (3)   Bison",
+			"  (r)   Rest",
 			"  (esc) Quit",
 		}
 		show()
@@ -55,9 +62,27 @@ func selectenemy() (result int) {
 			case "1":
 				enemy = MobSlime
 				result = battle()
+			case "2":
+				enemy = MobBat
+				result = battle()
+			case "3":
+				enemy = MobBison
+				result = battle()
+			case "r":
+				dialog.append("")
+				if rest > 0 {
+					dialog.append("You can't rest again this turn.")
+				} else {
+					dialog.append("You rest for a while. You recover 20 hp.")
+					player.addhp(20)
+					rest = REST_TURNS
+				}
+				waitspace()
 		}
 
+		if result == 1 { rest = maxi(0, rest-1) }
 		if result == 2 { return }
+		result = 0
 	}
 }
 
@@ -194,5 +219,10 @@ func input() string {
 
 func maxi(a, b int) int {
 	if (a > b) { return a }
+	return b
+}
+
+func mini(a, b int) int {
+	if (a < b) { return a }
 	return b
 }

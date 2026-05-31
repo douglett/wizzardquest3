@@ -3,11 +3,10 @@ package main
 import "fmt"
 
 type Mob struct {
-	name  string
-	hp    int
-	lvl   int
-	stm, str, int, def int
-	xp    int
+	name          string
+	hp            int
+	lvl, xp       int
+	stm, str, def int
 }
 
 func (mob* Mob) show(x, y int) {
@@ -17,7 +16,6 @@ func (mob* Mob) show(x, y int) {
 		fmt.Sprintf("lvl: %d", mob.lvl),
 		fmt.Sprintf("stm: %d", mob.stm),
 		fmt.Sprintf("str: %d", mob.str),
-		fmt.Sprintf("int: %d", mob.int),
 		fmt.Sprintf("def: %d", mob.def),
 		fmt.Sprintf("xp:  %d", mob.xp),
 	}
@@ -31,4 +29,8 @@ func (mob* Mob) show(x, y int) {
 
 func (mob* Mob) fullhp() {
 	mob.hp = mob.stm * STAMMOD
+}
+
+func (mob* Mob) addhp(hp int) {
+	mob.hp = mini(mob.stm * STAMMOD, mob.hp + hp)
 }
