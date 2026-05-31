@@ -23,21 +23,21 @@ var LevelStats = []Mob{
 	},
 	Mob{
 		lvl: 3,
-		xp:  70,
+		xp:  50,
 		stm: 8,
 		str: 7,
 		def: 2,
 	},
 	Mob{
 		lvl: 4,
-		xp:  150,
+		xp:  100,
 		stm: 9,
 		str: 9,
 		def: 3,
 	},
 	Mob{
 		lvl: 5,
-		xp:  250,
+		xp:  170,
 		stm: 11,
 		str: 10,
 		def: 4,
@@ -45,7 +45,7 @@ var LevelStats = []Mob{
 	// eyeballed
 	Mob{
 		lvl: 6,
-		xp:  350,
+		xp:  300,
 		stm: 12,
 		str: 11,
 		def: 5,
@@ -79,23 +79,23 @@ var MobBat = Mob{
 var MobBison = Mob{
 	name: "bison",
 	lvl: 3,
-	xp:  15,
+	xp:  25,
 	stm: 7,
-	str: 5,
+	str: 4,
 	def: 2,
 }
 var MobBandit = Mob{
 	name: "bandit",
 	lvl: 4,
-	xp:  25,
+	xp:  35,
 	stm: 6,
-	str: 10,
+	str: 8,
 	def: 2,
 }
 var MobDarkKnight = Mob{
 	name: "d-knight",
 	lvl: 5,
-	xp:  40,
+	xp:  50,
 	stm: 6,
 	str: 10,
 	def: 5,

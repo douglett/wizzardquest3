@@ -21,10 +21,8 @@ func main() {
 	}
 	screen.SetTitle("Wizzard Battle Engine!")
 
-	player = LevelStats[6]
+	player = LevelStats[1]
 	player.fullhp()
-
-	// temp
 	// player.hp = 1
 	player.name = "player"
 	player.xp = 0
@@ -45,13 +43,14 @@ func recoverquit() {
 }
 
 func selectenemy() (result int) {
-	const REST_TURNS = 3
+	const REST_TURNS = 2
 	rest := REST_TURNS
 
 	for {
 		// show
 		dialog.lines = []string{
-			fmt.Sprintf("Rest available in %d turns.", rest),
+			fmt.Sprintf("Rest available: %d turns", rest),
+			fmt.Sprintf("Next level: %d xp", nextlevel()),
 			"Select enemy:",
 			"  (1)   Slime",
 			"  (2)   Bat",
@@ -194,9 +193,16 @@ func levelup() {
 	player.lvl = next.lvl
 	player.stm = next.stm
 	player.str = next.str
+	player.def = next.def
 	player.xp  = player.xp - next.xp
 
 	waitspace()
+}
+
+func nextlevel() int {
+	if player.lvl >= len(LevelStats) - 1 { return 0 }
+	next := LevelStats[player.lvl + 1]
+	return next.xp - player.xp
 }
 
 func youwin() {
